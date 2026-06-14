@@ -50,9 +50,6 @@ The project compares three simple strategies:
 These strategies are deliberately simple. The point is to make the risk-return trade-off visible instead of hiding it inside a complex optimizer.
 
 ## Repository Structure
-if u want to look at the results and the raport stronglt sugest you to just look at teh Risk_raport.pdf
-
-
 If you want to look at the results and the report, I strongly suggest checking `Risk_report.pdf`.
 
 ```text
