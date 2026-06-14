@@ -6,24 +6,33 @@ The project was prepared for a risk and performance measurement course. It is in
 
 ## What This Project Does
 
-The notebook downloads daily stock prices, converts them into returns, builds several portfolios, and evaluates them with standard finance metrics. The main question is not only which portfolio earned the highest return, but whether that return was attractive after accounting for volatility, drawdowns, and tail risk.
+The notebook downloads daily stock prices, converts them into returns, builds several portfolios, and evaluates them with standard finance metrics. The main question is not only which portfolio earned the highest return, but whether we were able to model portfolio risk properly while also calculating the Value at Risk exception rate and evaluating the portfolios through broader performance measures, not only raw profit.
 
 The analysis covers:
 
 - daily and annualized return,
 - daily and annualized volatility,
-- Sharpe ratio and Sortino ratio,
-- maximum drawdown and Calmar ratio,
+- Sharpe ratio,
+- maximum drawdown,
 - historical Value at Risk (VaR),
 - Expected Shortfall (ES / CVaR),
 - rolling out-of-sample VaR backtesting.
 
 ## Portfolio Universe
 
-The default stock universe is:
+The default stocks were selected intentionally. If you wonder why I picked them, look at the first letters of the tickers:
 
 ```text
 META, AAPL, TGT, EXPD, UNH, SBUX, ZBRA, MRNA, ACN, TSN
+The analysis covers:
+
+- daily and annualized return,
+- daily and annualized volatility,
+- Sharpe ratio,
+- maximum drawdown,
+- historical Value at Risk (VaR),
+- Expected Shortfall (ES / CVaR),
+- rolling out-of-sample VaR backtesting.
 ```
 
 Prices are downloaded from Yahoo Finance with `yfinance`. The current setup uses 2022 as the in-sample period and 2023-2024 as the out-of-sample testing period.
@@ -41,6 +50,8 @@ The project compares three simple strategies:
 These strategies are deliberately simple. The point is to make the risk-return trade-off visible instead of hiding it inside a complex optimizer.
 
 ## Repository Structure
+if u want to look at the results and the raport stronglt sugest you to just look at teh Risk_raport.pdf
+
 
 ```text
 .
@@ -53,15 +64,6 @@ These strategies are deliberately simple. The point is to make the risk-return t
 |-- requirements.txt               # Python dependencies
 |-- sourcing.ipynb                 # compatibility copy of the notebook
 `-- README.md
-```
-
-If a LaTeX report is added later, the recommended location is:
-
-```text
-report/
-|-- risk_performance_report.tex
-|-- risk_performance_report.pdf
-`-- figures/
 ```
 
 ## How to Run
