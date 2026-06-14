@@ -1,123 +1,60 @@
-# Portfolio Risk Analysis & Backtesting
+# Portfolio Risk Analysis and Backtesting
 
-## Overview
+## Objective
 
-This project implements a comprehensive portfolio risk analysis framework including:
-- **Risk Metrics Calculation** - VaR, ES, Sharpe ratio, maximum drawdown
-- **Portfolio Construction** - Equal-weight and optimized (inverse ES) strategies
-- **Backtesting** - Validation of risk models on out-of-sample data (2023-2024)
-- **Performance Comparison** - Realized metrics for different portfolio strategies
+The goal of this project is to measure and compare the risk-adjusted performance of selected equity portfolios. The analysis combines descriptive performance statistics with downside-risk measures and a simple historical VaR backtest.
 
-## Project Structure
+## Data
 
-```
-.
-├── notebooks/
-│   └── portfolio_analysis.ipynb      # Main analysis notebook
-├── src/
-│   ├── __init__.py
-│   ├── metrics.py                    # Risk metrics calculations
-│   └── portfolio.py                  # Portfolio construction
-├── data/                              # Data directory (if needed)
-├── requirements.txt                   # Python dependencies
-└── README.md                          # This file
-```
+The default universe contains ten US-listed stocks:
 
-## Installation
+- META
+- AAPL
+- TGT
+- EXPD
+- UNH
+- SBUX
+- ZBRA
+- MRNA
+- ACN
+- TSN
 
-1. **Create virtual environment** (if not already done):
-```bash
-python -m venv .venv
-.venv\Scripts\activate  # On Windows
-```
+Daily adjusted close prices are downloaded with `yfinance` for the period from 2022-01-01 to 2025-01-01.
 
-2. **Install dependencies**:
-```bash
-pip install -r requirements.txt
-```
+## Portfolio Construction
 
-## Usage
+The notebook uses 2022 as an in-sample period and builds three strategies:
 
-### Running the Analysis
+| Strategy | Description |
+| --- | --- |
+| Top 3 Equal Weight | Equal-weight allocation to the three assets with the highest average daily return in 2022. |
+| Exclude Top 3 Equal Weight | Equal-weight allocation to all assets except the top three performers from 2022. |
+| Optimized 5 Inverse ES | Allocation to five assets with the best Sharpe ratios, weighted inversely to Expected Shortfall. |
 
-Launch Jupyter notebook:
-```bash
-jupyter notebook notebooks/portfolio_analysis.ipynb
-```
+## Metrics
 
-### Using the Library
+The project reports:
 
-```python
-from src.metrics import portfolio_metrics, max_drawdown
-from src.portfolio import portfolio_returns_from_assets, optimize_weights_inverse_es
+- mean daily return
+- daily volatility
+- annualized return
+- annualized volatility
+- 1% historical VaR
+- 2.5% Expected Shortfall
+- Sharpe ratio
+- Sortino ratio
+- maximum drawdown
+- Calmar ratio
 
-# Calculate portfolio returns
-port_returns = portfolio_returns_from_assets(data, assets=['AAPL', 'MSFT'])
+## Backtesting
 
-# Calculate metrics
-metrics = portfolio_metrics(port_returns, rf_annual=0.03)
-print(metrics)
+The VaR backtest uses a 250-trading-day rolling historical window. For each out-of-sample day, the model estimates 1% historical VaR from the previous 250 daily returns and checks whether the realized return falls below that VaR threshold.
 
-# Optimize weights based on inverse ES
-weights = optimize_weights_inverse_es(risk_df, assets=['AAPL', 'MSFT'])
-```
+The expected exception rate is 1%. A much higher realized exception rate indicates that the model understated downside risk during the tested period.
 
-## Analysis Sections
+## Main Limitations
 
-### 1. Data Preparation
-- Download historical price data for 10 stocks (2022-2025)
-- Calculate daily returns
-- Visualize price movements and correlations
-
-### 2. Risk Analysis (2022)
-- Calculate individual stock risk metrics
-- Compare three portfolio strategies:
-  - **Top-3 Equal Weight**: Equal allocation to 3 best performers
-  - **Exclude-3 Equal Weight**: Equal allocation excluding top 3
-  - **Optimized-5 (Inverse ES)**: Weighted by inverse Expected Shortfall
-- Visualize portfolio value evolution
-
-### 3. Backtesting (2023-2024)
-- Validate VaR models using rolling 250-day windows
-- Test both optimized and equal-weight portfolios
-- Measure exception rates vs. theoretical expectations
-
-## Key Metrics
-
-- **Mean (daily)**: Average daily return
-- **Std (daily)**: Daily standard deviation
-- **VaR 1%**: Value at Risk at 99% confidence level
-- **ES 2.5%**: Expected Shortfall (CVaR) at 97.5% confidence
-- **Sharpe (ann.)**: Annualized Sharpe ratio
-- **Max Drawdown**: Maximum loss from peak
-
-## Assumptions & Limitations
-
-- No transaction costs or slippage
-- Simple (non-log) returns used throughout
-- Historical VaR/ES based on empirical quantiles
-- Risk-free rate assumed constant
-- Weights rebalanced annually (2022 → 2023+)
-
-## Data Sources
-
-- Stock prices: Yahoo Finance via `yfinance`
-- Period: 2022-01-01 to 2025-01-01
-- Tickers: META, AAPL, TGT, EXPD, UNH, SBUX, ZBRA, MRNA, ACN, TSN
-
-## Future Enhancements
-
-- [ ] Transaction cost modeling
-- [ ] Dynamic weight rebalancing
-- [ ] GARCH volatility modeling
-- [ ] Parametric VaR calculation
-- [ ] Monte Carlo simulations
-- [ ] Correlation stress testing
-
-## Author
-
-Mateusz Gappa
-
-## License
-
-MIT
+- No transaction costs, bid-ask spreads, taxes, or market-impact assumptions.
+- Portfolios are long-only and relatively simple.
+- Historical VaR assumes the recent empirical distribution is informative for future risk.
+- The framework is educational and should not be treated as investment advice.
