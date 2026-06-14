@@ -53,6 +53,8 @@ These strategies are deliberately simple. The point is to make the risk-return t
 if u want to look at the results and the raport stronglt sugest you to just look at teh Risk_raport.pdf
 
 
+If you want to look at the results and the report, I strongly suggest checking `Risk_report.pdf`.
+
 ```text
 .
 |-- notebooks/
